@@ -7,10 +7,10 @@ const createDockerCompose = (req, res) => {
     
 	dockerCompose.write("version: '2'\n\n");
     dockerCompose.write('volumes:\n');
-    dockerCompose.write('  '+req.body.ordererName+'.'+req.body.domainName+'\n');
+    dockerCompose.write('  '+req.body.ordererName+'.'+req.body.domainName+':\n');
     req.body.Orgs.forEach(function(orgObj) {
         for(let i = 0; i < orgObj.numberOfPeers; i++) {
-            dockerCompose.write('  peer' + i + '.' + orgObj.name + '.' + req.body.domainName + '\n');
+            dockerCompose.write('  peer' + i + '.' + orgObj.name + '.' + req.body.domainName + ':\n');
         }
     });
 
