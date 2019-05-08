@@ -2,9 +2,9 @@
 
 generate docker compose file by
 * run app using  
-```bash
-node app.js  
-```
+	```bash
+	node app.js  
+	```
 * request api:   
 
 	```bash
