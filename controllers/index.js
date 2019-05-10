@@ -358,7 +358,7 @@ const createconfigtxPort = (req) => {
 	configtx.write('            OrdererType: etcdraft\n');
 	configtx.write('            EtcdRaft:\n');
 	configtx.write('                Consenters:\n');
-	configtx.write('                - Host: '+req.body.ordererName+'.'+req.body.domainName+'\n');
+	configtx.write('                - Host: '+req.body.ordererName+'.'+req.body.domainName+'\n');//
 	configtx.write('                Port: 7050\n');
 	configtx.write('                ClientTLSCert: crypto-config/ordererOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/tls/server.crt\n');
 	configtx.write('                ServerTLSCert: crypto-config/ordererOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/tls/server.crt\n');
