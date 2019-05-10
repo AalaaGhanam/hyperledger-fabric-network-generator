@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const bodyParser = require('body-parser');
-const { createDockerCompose} = require('../controllers/index');
+const { createNetwork} = require('../controllers/index');
 
 router.use(bodyParser.json());
 
 router.route('/')
-    .post(createDockerCompose)
+    .post(createNetwork)
     
 module.exports = router;
