@@ -1,7 +1,7 @@
 # hyperledger-fabric-network-generator
 
 generate docker compose file
-* run app $ start network using  
+* run app and start network using  
 	```bash
 	node app.js  
 	```
