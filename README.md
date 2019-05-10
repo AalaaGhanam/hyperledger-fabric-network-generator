@@ -1,7 +1,7 @@
 # hyperledger-fabric-network-generator
 
 generate docker compose file
-* run app using  
+* run app $ start network using  
 	```bash
 	node app.js  
 	```
@@ -26,10 +26,6 @@ generate docker compose file
       "Couchdb": 1  
   }
 	``` 
-* start the network using:   
-  ```bash
-	./start.sh  
-	```
 * stop network:   
   ```bash
 	./stop.sh 
