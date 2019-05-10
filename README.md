@@ -26,3 +26,11 @@ generate docker compose file
       "Couchdb": 1  
   }
 	``` 
+* start the network using:   
+  ```bash
+	./start.sh  
+	```
+* stop network:   
+  ```bash
+	./stop.sh 
+	```
