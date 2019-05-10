@@ -6,7 +6,7 @@ const createNetwork = (req, res) => {
 	 createdockerCompose(req);
 	 createcryptoConfig(req);
 	 createconfigtxPort(req);
-	 createStratFile(req);
+	 createStartFile(req);
 	res.send('network created successfully');
 };
 
@@ -381,7 +381,7 @@ const createconfigtxPort = (req) => {
 	configtx.end();
 };
 
-const createStratFile = (req) => {
+const createStartFile = (req) => {
 	let start = fs.createWriteStream('start.sh');
 	start.write(`which cryptogen
 if [ "$?" -ne 0 ]; then
