@@ -2,12 +2,15 @@ var fs = require("fs");
 
 var shell = require('shelljs');
 
-const createNetwork = (req, res) => {
+const createNetwork =  (req, res) => {
 	 createdockerCompose(req);
 	 createcryptoConfig(req);
 	 createconfigtxPort(req);
-	 createStartFile(req);
-	res.send('network created successfully');
+	 createStratFile(req);
+		
+res.send('network created successfully');
+	
+
 };
 
 const createdockerCompose = (req) => {
@@ -50,8 +53,8 @@ const createdockerCompose = (req) => {
 	dockerCompose.write('    command: orderer\n');
 	dockerCompose.write('    volumes:\n');
 	dockerCompose.write('      - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block\n');
-	dockerCompose.write('      - ./crypto-config/peerOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/msp:/var/hyperledger/orderer/msp\n');
-	dockerCompose.write('      - ./crypto-config/peerOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/var/hyperledger/orderer/tls\n');
+	dockerCompose.write('      - ./crypto-config/ordererOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/msp:/var/hyperledger/orderer/msp\n');
+	dockerCompose.write('      - ./crypto-config/ordererOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/tls/:/var/hyperledger/orderer/tls\n');
     dockerCompose.write('      - '+req.body.ordererName+'.'+req.body.domainName+':/var/hyperledger/production/orderer\n');
 	dockerCompose.write('    ports:\n');
 	dockerCompose.write('      - '+port+':'+port+'\n');
@@ -208,13 +211,13 @@ const createconfigtxPort = (req) => {
 	configtx.write('        Policies:\n');
 	configtx.write('            Readers:\n');
 	configtx.write('                Type: Signature\n');
-	configtx.write("                Rule: 'OR('OrdererMSP.member')'\n");
+	configtx.write(`                Rule: "OR('OrdererMSP.member')"\n`);
 	configtx.write('            Writers:\n');
 	configtx.write('                Type: Signature\n');
-	configtx.write("                Rule: 'OR('OrdererMSP.member')'\n");
+	configtx.write(`                Rule: "OR('OrdererMSP.member')"\n`);
 	configtx.write('            Admins:\n');
 	configtx.write('                Type: Signature\n');
-	configtx.write("                Rule: 'OR('OrdererMSP.admin')'\n\n");
+	configtx.write(`                Rule: "OR('OrdererMSP.admin')"\n\n`);
 	req.body.Orgs.forEach(function(orgObj) {
 		configtx.write('    - &'+orgObj.name+'\n');
 		configtx.write('        Name: '+orgObj.name+'MSP\n');
@@ -223,16 +226,16 @@ const createconfigtxPort = (req) => {
 		configtx.write('        Policies:\n');
 		configtx.write('            Readers:\n');
 		configtx.write('                Type: Signature\n');
-		configtx.write("                Rule: 'OR('"+orgObj.name+"MSP.admin', '"+orgObj.name+"MSP.peer', '"+orgObj.name+"MSP.client')'\n");
+		configtx.write(`                Rule: "OR('`+orgObj.name+`MSP.admin', '`+orgObj.name+`MSP.peer', '`+orgObj.name+`MSP.client')"\n`);
 		configtx.write('            Writers:\n');
 		configtx.write('                Type: Signature\n');
-		configtx.write("                Rule: 'OR('"+orgObj.name+"MSP.admin', '"+orgObj.name+"MSP.client')'\n");
+		configtx.write(`                Rule: "OR('`+orgObj.name+`MSP.admin', '`+orgObj.name+`MSP.client')"\n`);
 		configtx.write('            Admins:\n');
 		configtx.write('                Type: Signature\n');
-		configtx.write("                Rule: 'OR('"+orgObj.name+"MSP.admin'\n");
+		configtx.write(`                Rule: "OR('`+orgObj.name+`MSP.admin')"\n`);
 		configtx.write('        AnchorPeers:\n');
 		configtx.write('            - Host: peer0.'+orgObj.name+'.'+req.body.domainName+'\n');
-		configtx.write('            Port: '+(configtxPort+1)+'\n');
+		configtx.write('              Port: '+(configtxPort+1)+'\n');
 		for(let i = 0; i < orgObj.numberOfPeers; i++) {
 			configtxPort += 1000;
 		}		
@@ -255,7 +258,7 @@ const createconfigtxPort = (req) => {
 	configtx.write('        Writers:\n');
 	configtx.write('            Type: ImplicitMeta\n');
 	configtx.write('            Rule: "ANY Writers"\n');
-	configtx.write('        Writers:\n');
+	configtx.write('        Admins:\n');
 	configtx.write('            Type: ImplicitMeta\n');
 	configtx.write('            Rule: "MAJORITY Admins"\n');
 	configtx.write('    Capabilities:\n');
@@ -265,7 +268,7 @@ const createconfigtxPort = (req) => {
 	configtx.write('    Addresses:\n');
 	configtx.write('        - '+req.body.ordererName+'.'+req.body.domainName+':7050\n');
 	configtx.write('    BatchTimeout: 2s\n');
-	configtx.write('    BatchSize:"\n');
+	configtx.write('    BatchSize:\n');
 	configtx.write('        MaxMessageCount: 10\n');
 	configtx.write('        AbsoluteMaxBytes: 99 MB\n');
 	configtx.write('        PreferredMaxBytes: 512 KB\n');
@@ -294,13 +297,13 @@ const createconfigtxPort = (req) => {
 	configtx.write('        Writers:\n');
 	configtx.write('            Type: ImplicitMeta\n');
 	configtx.write('            Rule: "ANY Writers"\n');
-	configtx.write('        Writers:\n');
+	configtx.write('        Admins:\n');
 	configtx.write('            Type: ImplicitMeta\n');
 	configtx.write('            Rule: "MAJORITY Admins"\n');
 	configtx.write('    Capabilities:\n');
 	configtx.write('        <<: *ApplicationCapabilities\n\n');
 	configtx.write('Profiles:\n');
-	configtx.write('    OrgsOrdererGenesis:\n');
+	configtx.write('    TwoOrgsOrdererGenesis:\n');
 	configtx.write('        <<: *ChannelDefaults\n');
 	configtx.write('        Orderer:\n');
 	configtx.write('            <<: *OrdererDefaults\n');
@@ -314,7 +317,7 @@ const createconfigtxPort = (req) => {
 	req.body.Orgs.forEach(function(orgObj) {
 		configtx.write('                    - *'+orgObj.name+'\n');
 	});
-	configtx.write('    OrgsChannel:\n');
+	configtx.write('    TwoOrgsChannel:\n');
 	configtx.write('        Consortium: SampleConsortium\n');
 	configtx.write('        <<: *ChannelDefaults\n');
 	configtx.write('        Application:\n');
@@ -359,9 +362,9 @@ const createconfigtxPort = (req) => {
 	configtx.write('            EtcdRaft:\n');
 	configtx.write('                Consenters:\n');
 	configtx.write('                - Host: '+req.body.ordererName+'.'+req.body.domainName+'\n');//
-	configtx.write('                Port: 7050\n');
-	configtx.write('                ClientTLSCert: crypto-config/ordererOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/tls/server.crt\n');
-	configtx.write('                ServerTLSCert: crypto-config/ordererOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/tls/server.crt\n');
+	configtx.write('                  Port: 7050\n');
+	configtx.write('                  ClientTLSCert: crypto-config/ordererOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/tls/server.crt\n');
+	configtx.write('                  ServerTLSCert: crypto-config/ordererOrganizations/'+req.body.domainName+'/orderers/'+req.body.ordererName+'.'+req.body.domainName+'/tls/server.crt\n');
 	configtx.write('            Addresses:\n');
 	configtx.write('                - '+req.body.ordererName+'.'+req.body.domainName+':7050\n');
 	configtx.write('            Organizations:\n');
@@ -381,7 +384,7 @@ const createconfigtxPort = (req) => {
 	configtx.end();
 };
 
-const createStartFile = (req) => {
+const createStratFile = (req) => {
 	let start = fs.createWriteStream('start.sh');
 	start.write(`which cryptogen
 if [ "$?" -ne 0 ]; then
@@ -412,8 +415,16 @@ CURRENT_DIR=$PWD\n
 		start.write('cd crypto-config/peerOrganizations/'+orgObj.name+'.'+req.body.domainName+'/ca/\n');
 		start.write('PRIV_KEY=$(ls *_sk)\n');
 		start.write('cd "$CURRENT_DIR"\n');
-		start.write('sed $OPTS "s/CA0_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yaml\n');
+		start.write('sed $OPTS "s/CA'+(req.body.Orgs).indexOf(orgObj)+'_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yaml\n');
 	});
+	start.write('which configtxgen\nmkdir channel-artifacts\nconfigtxgen -profile TwoOrgsOrdererGenesis -channelID first-sys-channel -outputBlock ./channel-artifacts/genesis.block\n');
+	start.write(`
+res=$?
+set +x
+if [ $res -ne 0 ]; then
+	echo "Failed to generate orderer genesis block..."
+	exit 1
+fi\n`);
 	start.write('docker-compose -f docker-compose.yaml up -d\n');
 	start.write('docker ps -a\n');
 	start.on('finish', () => {  
