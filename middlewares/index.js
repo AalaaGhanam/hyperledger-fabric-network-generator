@@ -3,9 +3,9 @@ const ncp = require('ncp').ncp;
 
 const verifyInput = (req, res, next) => {
     try {
-        const { domainName, ordererName, Orgs,  Couchdb, channelName, Language, chaincodeName, ccDirectory} = req.body
-        if (domainName && ordererName && Orgs &&  Couchdb && channelName && Language && chaincodeName && ccDirectory) { 
-            counter = 0;
+        const { domainName, ordererName, Orgs,  Couchdb, consensusType, channelName, Language, chaincodeName, ccDirectory} = req.body
+        if (domainName && ordererName && Orgs &&  Couchdb && consensusType && channelName && Language && chaincodeName && ccDirectory) { 
+             counter = 0;
             Language.toLowerCase();
             directory = (Language == 'golang') ? 'go' : Language;
             if( Orgs.length < 1) {
@@ -14,6 +14,9 @@ const verifyInput = (req, res, next) => {
             } else if( Couchdb != '1' && Couchdb != '0') {
                 return res.status(401).json({
                     message: 'Couchdb should be boolean'});
+            } else if( consensusType != 'solo' && consensusType != 'kafka' && consensusType != 'etcdraft') {
+                return res.status(401).json({
+                    message: 'invalid type of consensus'});
             } else if( Language != "node" && Language != "java" && Language != "golang") {
                 return res.status(401).json({
                     message: 'wrong type of language'});

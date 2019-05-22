@@ -800,11 +800,20 @@ function generateChannelArtifacts() {
 	  echo "configtxgen tool not found. exiting"
 	  exit 1
 	fi
-  
 	echo "Generating Orderer Genesis block "
-	echo "CONSENSUS_TYPE=solo"
-	set -x
-	configtxgen -profile TwoOrgsOrdererGenesis -channelID first-sys-channel -outputBlock ./channel-artifacts/genesis.block
+	echo "CONSENSUS_TYPE="$CONSENSUS_TYPE
+  set -x
+  if [ "$CONSENSUS_TYPE" == "solo" ]; then
+    configtxgen -profile TwoOrgsOrdererGenesis -channelID first-sys-channel -outputBlock ./channel-artifacts/genesis.block
+  elif [ "$CONSENSUS_TYPE" == "kafka" ]; then
+    configtxgen -profile SampleDevModeKafka -channelID first-sys-channel -outputBlock ./channel-artifacts/genesis.block
+  elif [ "$CONSENSUS_TYPE" == "etcdraft" ]; then
+    configtxgen -profile SampleMultiNodeEtcdRaft -channelID first-sys-channel -outputBlock ./channel-artifacts/genesis.block
+  else
+    set +x
+    echo "unrecognized CONSESUS_TYPE='$CONSENSUS_TYPE'. exiting"
+    exit 1
+	fi
 	res=$?
 	set +x
 	if [ $res -ne 0 ]; then
@@ -845,6 +854,7 @@ CLI_DELAY=3
 CHANNEL_NAME=`+req.body.channelName+`
 COMPOSE_FILE=docker-compose.yaml
 LANGUAGE=`+req.body.channelName+`
+CONSENSUS_TYPE=`+req.body.consensusType+`
 
 if [ "$1" = "-m" ]; then
   shift

@@ -23,8 +23,9 @@ generate docker compose file
 		}
 	],
 	"Couchdb": 1,
+	"consensusType": "solo/kafka/etcdraft",
 	"channelName": "channel",
-	"Language": "node",
+	"Language": "node/go/java",
 	"chaincodeName": "chaincode",
 	"ccDirectory": "../"
 	}   
