@@ -60,7 +60,7 @@ const createdockerCompose = (req) => {
 	dockerCompose.write('    networks:\n');
 	dockerCompose.write('      - first\n\n');
 	 //Couchdb
-	 if(req.body.Couchdb == 1) {
+	 if(req.body.Couchdb == '1') {
 		dockerCompose.write('  couchdb0:\n');
 		dockerCompose.write('    container_name: couchdb0\n');
 		dockerCompose.write('    image: hyperledger/fabric-couchdb\n');
@@ -115,7 +115,7 @@ const createdockerCompose = (req) => {
             dockerCompose.write('      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.'+orgObj.name+'.'+req.body.domainName+':'+(port+1)+'\n');
             dockerCompose.write('      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer'+i+'.'+orgObj.name+'.'+req.body.domainName+':'+(port+1)+'\n');
 			dockerCompose.write('      - CORE_PEER_LOCALMSPID='+orgObj.name+'MSP\n');
-            if(req.body.Couchdb == 1) {
+            if(req.body.Couchdb == '1') {
                 dockerCompose.write('      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB\n');
                 dockerCompose.write('      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:'+couchdbPort+'\n');
                 dockerCompose.write('      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=\n');
@@ -128,7 +128,7 @@ const createdockerCompose = (req) => {
 			dockerCompose.write('      - ./crypto-config/peerOrganizations/'+orgObj.name+'.'+req.body.domainName+'/peers/peer'+i+'.'+orgObj.name+'.'+req.body.domainName+'/msp:/etc/hyperledger/fabric/msp\n');
 			dockerCompose.write('      - ./crypto-config/peerOrganizations/'+orgObj.name+'.'+req.body.domainName+'/peers/peer'+i+'.'+orgObj.name+'.'+req.body.domainName+'/tls:/etc/hyperledger/fabric/tls\n');
             dockerCompose.write('      - peer'+i+'.'+orgObj.name+'.'+req.body.domainName+':/var/hyperledger/production\n');
-			if(req.body.Couchdb == 1) {
+			if(req.body.Couchdb == '1') {
                 dockerCompose.write('    depends_on:\n');
                 dockerCompose.write('      - couchdb0\n');
 			}

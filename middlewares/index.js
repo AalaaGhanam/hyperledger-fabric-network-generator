@@ -11,7 +11,7 @@ const verifyInput = (req, res, next) => {
             if( Orgs.length < 1) {
                 return res.status(401).json({
                     message: 'number of organization should be at least one organization'});
-            } else if( Couchdb != 1 && Couchdb != 0) {
+            } else if( Couchdb != '1' && Couchdb != '0') {
                 return res.status(401).json({
                     message: 'Couchdb should be boolean'});
             } else if( Language != "node" && Language != "java" && Language != "golang") {
