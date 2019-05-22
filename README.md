@@ -14,12 +14,12 @@ generate docker compose file
 	"ordererName": "orderer",
 	"Orgs": [
 		{
-			"name": "org1",
-			"numberOfPeers": 2
+		 "name": "org1",
+		 "numberOfPeers": 2
 		},
 		{
-			"name": "org2",
-			"numberOfPeers": 2
+		 "name": "org2",
+		 "numberOfPeers": 2
 		}
 	],
 	"Couchdb": 1,
@@ -27,7 +27,7 @@ generate docker compose file
 	"Language": "node",
 	"chaincodeName": "chaincode",
 	"ccDirectory": "../"
-}
+	}   
 	``` 
 * stop network:   
   ```bash
