@@ -20,7 +20,7 @@ const verifyInput = (req, res, next) => {
             } else if( Language != "node" && Language != "java" && Language != "golang") {
                 return res.status(401).json({
                     message: 'wrong type of language'});
-            }  else if (fs.existsSync(ccDirectory)) {
+            } else if (fs.existsSync(ccDirectory)) {
                 ncp(ccDirectory, './../chaincode/cc_path/'+directory, function (err) {
                     if (err) {
                         return res.status(401).json({
