@@ -4,6 +4,7 @@ const ncp = require('ncp').ncp;
 const verifyInput = (req, res, next) => {
     try {
         const { domainName, ordererName, Orgs,  Couchdb, consensusType, channelName, Language, chaincodeName, ccDirectory} = req.body
+        
         if (domainName && ordererName && Orgs &&  Couchdb && consensusType && channelName && Language && chaincodeName && ccDirectory) { 
             counter = 0;
             Language.toLowerCase();
