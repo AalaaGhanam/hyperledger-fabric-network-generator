@@ -1,9 +1,36 @@
-# todo app frontend
-navigate to frontend/frontend folder
-* navigate to frontend/frontend folder 
-* run required commands   
+# hyperledger-fabric-network-generator
+
+generate docker compose file
+* run app and start network using  
+	```bash
+	node app.js  
+	```
+* request api:   
 
 	```bash
-    npm install
-	ng serve --proxy-config proxy.conf.json  
+	POST:http://localhost:8081/
+	{
+	"domainName":"domain.com",
+	"ordererName": "orderer",
+	"Orgs": [
+		{
+		 "name": "org1",
+		 "numberOfPeers": 2
+		},
+		{
+		 "name": "org2",
+		 "numberOfPeers": 2
+		}
+	],
+	"Couchdb": 1,
+	"consensusType": "solo/kafka/etcdraft",
+	"channelName": "channel",
+	"Language": "node/go/java",
+	"chaincodeName": "chaincode",
+	"ccDirectory": "../"
+	}   
 	``` 
+* stop network:   
+  ```bash
+	./stop.sh 
+	```
